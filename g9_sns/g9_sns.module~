@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * Implements hook_entity_nsert().
+ */
+function g9_sns_entity_insert(Drupal\Core\Entity\EntityInterface $entity) {
+    g9_sns_send_message($entity, 'insert');
+}
+
+/**
+ * IMplements hook_entity_update().
+ */
+function g9_sns_entity_update(Drupal\Core\Entity\EntityInterface $entity) {
+    g9_sns_send_message($entity, 'update');
+    
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function g9_sns_entity_delete(Drupal\Core\Entity\EntityInterface $entity) {
+    g9_sns_send_message($entity, 'delete');    
+}
+
+function g9_sns_send_message($entity, $op) {
+    $config = \Drupal::config('g9_sns.settings');
+    $entity_settings = $config->get("enabled_sns_entities");
+    $topics = $config->get('topics');
+    $bundle = $entity->bundle();
+
+    foreach ($topics as $topic => $arn) {
+        \Drupal::logger('khalid log')->notice($topic);
+        \Drupal::logger('khalid log')->notice($bundle);
+        if ($entity_settings[$topic][$bundle]['ops'][$op]) {
+            $message = [
+                'entity_id' => $entity->id(),
+                'entity_type' => $bundle,
+                'changed' => time(),
+            ];
+            \Drupal::service('g9_sns')->sendMessage($arn, $message);
+            \Drupal::logger('g9_sns.module')->debug("Sent messagefor entity {$entity->id()} for topic $topic");
+        }
+    }
+
+}

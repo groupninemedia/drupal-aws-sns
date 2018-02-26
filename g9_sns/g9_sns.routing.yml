@@ -1,0 +1,7 @@
+g9_sns.configuration:
+  path: '/admin/config/services/g9_sns'
+  defaults:
+    _form: '\Drupal\g9_sns\Form\SnsSettingsForm'
+    _title: 'AWS SNS Settings'
+  requirements:
+    _permission: 'administer site configuration'
