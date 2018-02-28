@@ -6,13 +6,13 @@
     "authors": [
         {
             "name": "Khalid Richards (khalid-rich)",
-            "homepage": "https://www.drupal.org/u/krichards",
+            "homepage": "https://www.drupal.org/u/krichards"
 
         }
     ],
     "support": {
-        "issues": "",
-        "source": "",
+        "issues": "https://github.com/groupninemedia/drupal-aws-sns/issues",
+        "source": "https://github.com/groupninemedia/drupal-aws-sns"
     },
     "license": "GPL-2.0+",
     "minimum-stability": "dev",
