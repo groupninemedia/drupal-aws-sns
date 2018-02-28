@@ -1,0 +1,22 @@
+{
+    "name": "groupninemedia/drupal-aws-sns",
+    "description": "This module defines an interface with the AWS Simple Notification Service (SNS).",
+    "type": "drupal-module",
+    "homepage": "https://github.com/groupninemedia/drupal-aws-sns",
+    "authors": [
+        {
+            "name": "Khalid Richards (khalid-rich)",
+            "homepage": "https://www.drupal.org/u/krichards",
+
+        }
+    ],
+    "support": {
+        "issues": "",
+        "source": "",
+    },
+    "license": "GPL-2.0+",
+    "minimum-stability": "dev",
+    "require": {
+        "aws/aws-sdk-php": "3.*"
+    }
+}
