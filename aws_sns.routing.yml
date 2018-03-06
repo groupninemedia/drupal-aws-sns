@@ -1,0 +1,7 @@
+aws_sns.configuration:
+  path: '/admin/config/services/aws_sns'
+  defaults:
+    _form: '\Drupal\aws_sns\Form\SnsSettingsForm'
+    _title: 'AWS SNS Settings'
+  requirements:
+    _permission: 'administer site configuration'

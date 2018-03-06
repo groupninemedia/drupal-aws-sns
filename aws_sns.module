@@ -1,0 +1,49 @@
+
+<?php
+
+/**
+ * Implements hook_entity_nsert().
+ */
+function aws_sns_entity_insert(Drupal\Core\Entity\EntityInterface $entity) {
+    aws_sns_send_message($entity, 'insert');
+}
+
+/**
+ * IMplements hook_entity_update().
+ */
+function aws_sns_entity_update(Drupal\Core\Entity\EntityInterface $entity) {
+    aws_sns_send_message($entity, 'update');
+    
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function aws_sns_entity_delete(Drupal\Core\Entity\EntityInterface $entity) {
+    aws_sns_send_message($entity, 'delete');    
+}
+
+function aws_sns_send_message($entity, $op) {
+    $config = \Drupal::config('aws_sns.settings');
+    $entity_settings = $config->get("enabled_sns_entities");
+    $topics = $config->get('topics');
+    $bundle = $entity->bundle();
+
+    foreach ($topics as $topic => $arn) {
+        $topic_settings = $entity_settings[$topic];
+        foreach ($topic_settings as $entity_type => $settings) {
+            if ($settings[$bundle]['ops'][$op]) {
+                $message = [
+                    'entity_id' => $entity->id(),
+                    'entity_type' => $entity->getEntityTypeId(),
+                    'bundle' => $bundle,
+                    'op' => $op,
+                    'changed' => time(),
+                ];
+                \Drupal::service('aws_sns')->sendMessage($arn, $message);
+                \Drupal::logger('aws_sns.module')->debug("Sent messagefor entity {$entity->id()} for topic $topic");
+            }
+        }
+    }
+
+}

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\g9_sns\Form;
+namespace Drupal\aws_sns\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -15,7 +15,7 @@ use Drupal\Core\Entity\EntityTypeBundleInfo;
 /**
  * Class SnsSettingsForm
  * 
- * @package Drupal\g9_sns\Form
+ * @package Drupal\aws_sns\Form
  */
 
 class SnsSettingsForm extends ConfigFormBase {
@@ -41,17 +41,21 @@ class SnsSettingsForm extends ConfigFormBase {
     }
 
     public function getFormId() {
-        return 'g9_sns.settings';
+        return 'aws_sns.settings';
     }
 
     protected function getEditableConfigNames() {
-        return ['g9_sns.settings'];
+        return ['aws_sns.settings'];
     }
 
     public function buildForm(array $form, FormStateInterface $form_state) {
-        $config = \Drupal::config('g9_sns.settings');
+        $config = \Drupal::config('aws_sns.settings');
         $entity_types = \Drupal::entityTypeManager()->getDefinitions();
         $enabled_sns_entities = $config->get('enabled_sns_entities');
+
+        $form['directions'] = [
+            '#markup' => 'All topics should be defined in your site\'s settings file. Each topic will show up here, and you can go through each of the bundles and select the node operations (insert/update/delete) you want to enable.'
+        ];
 
         $form['enabled_sns_entities'] = [
             '#type' => 'fieldset',
@@ -69,18 +73,26 @@ class SnsSettingsForm extends ConfigFormBase {
             ];
 
             foreach ($entity_types as $entity_type) {
-                $bundles = $this->getEntityBundles($entity_type->id());
-                foreach ($bundles as $bundle) {
-                    $allowed = $enabled_sns_entities[$topic][$bundle]['allow'];
-                    $ops = $enabled_sns_entities[$topic][$bundle]['ops'];
+                $entity_type_id = $entity_type->id();
+                $form['enabled_sns_entities'][$topic][$entity_type_id] = [
+                    '#type' => 'fieldset',
+                    '#title' => "$entity_type_id Bundles",
+                    '#tree' => TRUE,
+                ];
 
-                    $form['enabled_sns_entities'][$topic][$bundle]['allow'] = [
-                        '#type' => 'checkbox',
-                        '#title' => $bundle,
-                        '#default_value' => $allowed
+                $bundles = $this->getEntityBundles($entity_type->id());
+                foreach ($bundles as $bundle => $label) {
+                    $ops = $enabled_sns_entities[$topic][$entity_type_id][$bundle]['ops'];
+                    $open = !empty(array_filter(array_values($ops)));
+
+                    $form['enabled_sns_entities'][$topic][$entity_type_id][$bundle] = [
+                        '#type' => 'details',
+                        '#title' => $label,
+                        '#tree' => TRUE,
+                        '#open' => $open,
                     ];
 
-                    $form['enabled_sns_entities'][$topic][$bundle]['ops'] = [
+                    $form['enabled_sns_entities'][$topic][$entity_type_id][$bundle]['ops'] = [
                         '#type' => 'checkboxes',
                         '#title' => 'Entity Operations',
                         '#options' => $this->getEntityOps(),
@@ -94,7 +106,7 @@ class SnsSettingsForm extends ConfigFormBase {
     }
 
     public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
-        $config = $this->config('g9_sns.settings');
+        $config = $this->config('aws_sns.settings');
         $config->set('enabled_sns_entities', $form_state->getValue('enabled_sns_entities'));
         $config->save();
         parent::submitForm($form, $form_state);
@@ -116,7 +128,13 @@ class SnsSettingsForm extends ConfigFormBase {
          \Drupal::typedDataManager(), 
          \Drupal::cache());
 
-         return array_keys($bundle_info->getBundleInfo($entity_type_name));
+         $info = $bundle_info->getBundleInfo($entity_type_name);
+         $bundles = [];
+         foreach ($info as $name => $i) {
+            $bundles[$name] = $i['label'];
+
+         }
+         return $bundles;
     }
 
     /**

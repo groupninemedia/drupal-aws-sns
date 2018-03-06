@@ -1,4 +1,4 @@
 services:
-  g9_sns:
-    class: Drupal\g9_sns\SnsService
+  aws_sns:
+    class: Drupal\aws_sns\SnsService
     arguments: ['@config.factory', '@logger.factory']

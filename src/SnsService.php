@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\g9_sns;
+namespace Drupal\aws_sns;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -11,7 +11,7 @@ use Aws\Sns\SnsClient;
 /**
  * Class AwsSns.
  *
- * @package Drupal\g9_sns
+ * @package Drupal\aws_sns
  */
 class SnsService implements ContainerInjectionInterface {
 
@@ -25,7 +25,7 @@ class SnsService implements ContainerInjectionInterface {
   /**
    * The SNS Messenger.
    *
-   * @var \Drupal\g9_sns\SnsMessenger
+   * @var \Drupal\aws_sns\SnsMessenger
    */
   protected $snsMessenger = NULL;
 
@@ -42,8 +42,8 @@ class SnsService implements ContainerInjectionInterface {
   public function __construct(
     ConfigFactoryInterface $config_factory,
     LoggerChannelFactory $logger) {
-    $this->snsConfig = $config_factory->get('g9_sns.settings');
-    $this->logger = $logger->get('g9_sns');
+    $this->snsConfig = $config_factory->get('aws_sns.settings');
+    $this->logger = $logger->get('aws_sns');
 
 
       try {
@@ -121,7 +121,7 @@ class SnsService implements ContainerInjectionInterface {
       return $message_id;
     }
     else {
-      \Drupal::logger('g9_aws.SnsService')->error('Cannot send message: ' . print_r($message, TRUE));
+      \Drupal::logger('aws_sns.SnsService')->error('Cannot send message: ' . print_r($message, TRUE));
       return FALSE;
     }
   }

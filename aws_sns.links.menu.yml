@@ -1,0 +1,5 @@
+aws_sns.configuration:
+  title: 'SNS'
+  route_name: 'aws_sns.configuration'
+  parent: system.admin_config_services
+  description: 'Choose which operations entity bundles will send messages to SNS topics.'

@@ -1,5 +1,0 @@
-g9_sns.configuration:
-  title: 'SNS'
-  route_name: 'g9_sns.configuration'
-  parent: system.admin_config_services
-  description: 'Configuration settings for the SNS module.'
