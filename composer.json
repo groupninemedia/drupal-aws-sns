@@ -14,7 +14,6 @@
         "issues": "https://github.com/groupninemedia/drupal-aws-sns/issues",
         "source": "https://github.com/groupninemedia/drupal-aws-sns"
     },
-    "license": "GPL-2.0+",
     "minimum-stability": "dev",
     "require": {
         "aws/aws-sdk-php": "3.*"
