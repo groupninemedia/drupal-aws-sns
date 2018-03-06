@@ -9,7 +9,7 @@ TBD
 
 Setting up topics is easy. Within the appropriate settings files, you'll need to do the following:
 
-[1] Provide AWS Credentials.
+*[1] Provide AWS Credentials.*
 
 In your settings file, you should define settings like so:
 ```
@@ -17,7 +17,7 @@ $config['aws_sns.settings']['aws_key'] = XXXXXX
 $config['aws_sns.settings']['aws_secret'] = YYYYYY
 ```
 
-[2] Define Topics.
+*[2] Define Topics.*
 
 Also in your settings file, you should define topics like so:
 ```
