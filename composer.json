@@ -1,6 +1,6 @@
 {
     "name": "groupninemedia/drupal-aws-sns",
-    "description": "This module defines an interface with the AWS Simple Notification Service (SNS).",
+    "description": "This module allows for communication between Drupal Instances and AWS Simple Notification Service (SNS).",
     "type": "drupal-module",
     "homepage": "https://github.com/groupninemedia/drupal-aws-sns",
     "authors": [
