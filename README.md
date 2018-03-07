@@ -3,7 +3,7 @@
 This is a module meant to allow communication with Amazon's Simple Notification Service (SNS) through Drupal 8. The idea here is simple, users define topics in their settings, configure which entity types should send messages for each topic, and then let the magic of Drupal do the rest.
 
 ## Installation Process
-This process assumes that you are using (Composer)[https://getcomposer.org/] to manage dependencies for your project. 
+This process assumes that you are using [Composer](https://getcomposer.org/) to manage dependencies for your project. 
 
 (1) Add this repository to your project's `composer.json` file: `composer config repositories.g9 https://github.com/groupninemedia/drupal-aws-sns`. Without this line, composer will try to either add a Drupal or Packagist package of the same name. 
 
