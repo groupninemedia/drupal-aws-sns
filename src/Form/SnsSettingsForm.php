@@ -27,11 +27,17 @@ class SnsSettingsForm extends ConfigFormBase {
      */
     protected $configFactory;
 
+    /**
+     * Constructs a new SnsSettingsForm instance.
+     */
     public function __construct(ConfigFactoryInterface $config_factory) {
         $this->configFactory = $config_factory;
 
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function create(\Symfony\Component\DependencyInjection\ContainerInterface $container)
     {
         return new static(
@@ -40,14 +46,23 @@ class SnsSettingsForm extends ConfigFormBase {
         
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getFormId() {
         return 'aws_sns.settings';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getEditableConfigNames() {
         return ['aws_sns.settings'];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(array $form, FormStateInterface $form_state) {
         $config = \Drupal::config('aws_sns.settings');
         $entity_types = \Drupal::entityTypeManager()->getDefinitions();
@@ -105,6 +120,9 @@ class SnsSettingsForm extends ConfigFormBase {
         return parent::buildForm($form, $form_state);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
         $config = $this->config('aws_sns.settings');
         $config->set('enabled_sns_entities', $form_state->getValue('enabled_sns_entities'));
