@@ -39,29 +39,27 @@ class SnsService implements ContainerInjectionInterface {
   /**
    * Constructs a new AwsSns instance.
    */
-  public function __construct(
-    ConfigFactoryInterface $config_factory,
-    LoggerChannelFactory $logger) {
+  public function __construct(ConfigFactoryInterface $config_factory, LoggerChannelFactory $logger) {
     $this->snsConfig = $config_factory->get('aws_sns.settings');
     $this->logger = $logger->get('aws_sns');
 
-
-      try {
-        $config = [
-          'credentials' => [
-            'key' => $this->snsConfig->get('aws_key'),
-            'secret' => $this->snsConfig->get('aws_secret'),
-          ],
-          'region' => 'us-east-1',
-          'version' => 'latest',
-        ];
-        \Drupal::logger('khalid log')->notice(print_r($config, TRUE));
-        $this->snsMessenger = SnsClient::factory($config);
-      }
-      catch (\Exception $e) {
-        $this->logger->notice("Cannot instantiate the AWS SNS client because of error '{$e->getMessage()}'.");
-      }
+    try {
+      $config = [
+        'credentials' => [
+          'key' => $this->snsConfig->get('aws_key'),
+          'secret' => $this->snsConfig->get('aws_secret'),
+        ],
+        'region' => 'us-east-1',
+        'version' => 'latest',
+      ];
+      $this->snsMessenger = SnsClient::factory($config);
     }
+    catch (\Exception $e) {
+      $this->logger->notice('Cannot instantiate the AWS SNS client because of error "@message".', [
+        '@message' => $e->getMessage(),
+      ]);
+    }
+  }
 
   /**
    * {@inheritdoc}
@@ -121,7 +119,7 @@ class SnsService implements ContainerInjectionInterface {
       return $message_id;
     }
     else {
-      \Drupal::logger('aws_sns.SnsService')->error('Cannot send message: ' . print_r($message, TRUE));
+      $this->logger->error('Cannot send message: ' . print_r($message, TRUE));
       return FALSE;
     }
   }
