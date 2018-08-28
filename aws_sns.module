@@ -46,7 +46,7 @@ function aws_sns_send_message(EntityInterface $entity, $op) {
   foreach ($topics as $topic => $arn) {
     $topic_settings = $entity_settings[$topic];
     foreach ($topic_settings as $entity_type => $settings) {
-      if (!array_key_exists($settings, $bundle) || !array_key_exists($settings[$bundle]['ops'], $op)) {
+      if (!array_key_exists($bundle, $settings) || !array_key_exists($op, $settings[$bundle]['ops'])) {
         continue;
       }
 
